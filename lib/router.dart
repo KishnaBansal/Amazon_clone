@@ -14,7 +14,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         builder: (context) => const Scaffold(
           body: Center(
             child: Text(
-              "ERROR 403",
+              "ERROR 404",
             ),
           ),
         ),

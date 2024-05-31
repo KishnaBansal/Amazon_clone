@@ -1,4 +1,13 @@
+import 'package:amazon_clone_app/common/widgets/custom_button.dart';
+import 'package:amazon_clone_app/common/widgets/custom_textField.dart';
+import 'package:amazon_clone_app/constants/global_variables.dart';
 import 'package:flutter/material.dart';
+
+enum Auth {
+  //This enum will keep the track of the radio buttons that we are on, will give the value to the radio buttons
+  signin,
+  signup,
+}
 
 class AuthScreen extends StatefulWidget {
   static const String routeName = '/auth-screen';
@@ -9,12 +18,133 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  Auth _auth = Auth.signup;
+  final _signUpFormKey = GlobalKey<FormState>();
+  final _signInFormKey = GlobalKey<FormState>();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          "That transition to auth screen!!",
+    return Scaffold(
+      backgroundColor: GlobalVariables.greyBackgroundCOlor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Welcome",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
+              ),
+              ListTile(
+                tileColor: _auth == Auth.signup
+                    ? GlobalVariables.backgroundColor
+                    : GlobalVariables.greyBackgroundCOlor,
+                title: const Text(
+                  "Create Account",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                leading: Radio(
+                  //Radio buttons allow users to select a single option from a predefined list of choices
+                  activeColor: GlobalVariables.secondaryColor,
+                  value: Auth.signup,
+                  groupValue: _auth,
+                  onChanged: (Auth? val) {
+                    setState(() {
+                      _auth = val!;
+                    });
+                  },
+                ),
+              ),
+              if (_auth == Auth.signup)
+                Container(
+                  //We are not using Sized box because we need to specify the colour also
+                  padding: const EdgeInsets.all(12.0),
+                  color: GlobalVariables.backgroundColor,
+                  child: Form(
+                    key: _signUpFormKey,
+                    child: Column(
+                      children: [
+                        CustomTextfield(
+                          controller: _nameController,
+                          hintText: "Name",
+                        ),
+                        const SizedBox(height: 10),
+                        CustomTextfield(
+                          controller: _emailController,
+                          hintText: "Email",
+                        ),
+                        const SizedBox(height: 10),
+                        CustomTextfield(
+                          controller: _passwordController,
+                          hintText: "Password",
+                        ),
+                        const SizedBox(height: 10),
+                        CustomButton(text: "Sign Up", onTap: () {}),
+                      ],
+                    ),
+                  ),
+                ),
+              ListTile(
+                tileColor: _auth == Auth.signin ? GlobalVariables.backgroundColor : GlobalVariables.greyBackgroundCOlor,
+                title: const Text(
+                  "Sign-In.",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                leading: Radio(
+                  //Radio buttons allow users to select a single option from a predefined list of choices
+                  activeColor: GlobalVariables.secondaryColor,
+                  value: Auth.signin,
+                  groupValue: _auth,
+                  onChanged: (Auth? val) {
+                    setState(() {
+                      _auth = val!;
+                    });
+                  },
+                ),
+              ),
+              if (_auth == Auth.signin)
+                Container(
+                  //We are not using Sized box because we need to specify the colour also
+                  padding: const EdgeInsets.all(12.0),
+                  color: GlobalVariables.backgroundColor,
+                  child: Form(
+                    key: _signInFormKey,
+                    child: Column(
+                      children: [
+                        CustomTextfield(
+                          controller: _emailController,
+                          hintText: "Email",
+                        ),
+                        const SizedBox(height: 10),
+                        CustomTextfield(
+                          controller: _passwordController,
+                          hintText: "Password",
+                        ),
+                        const SizedBox(height: 10),
+                        CustomButton(text: "Sign In", onTap: () {}),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
