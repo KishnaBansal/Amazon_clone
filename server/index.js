@@ -1,22 +1,27 @@
-console.log("Hello,World!!");
-//print hello....
+//IMPORT FROM PACKAGES
 const express = require('express'); //Similar to import 'package:express/express.dart'
+const mongoose = require('mongoose');
+//IMORT FROM OTHER FILES
+const authRouter = require('./routes/auth');  //Similar to import '.features/auth/screens/screen.dart'
+
+//INIT
 const PORT = 3000;
 const app = express();
+//If password contains special character hide it by using %40 instead of it
+const DB = 'mongodb+srv://kishna:kb1981%4005@cluster0.qeauhdq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
-// Creating an API
-// http://<youripaddress>/hello-world
-app.get('/hello-world',(req,res) => {
-    // res.send("Hello World!!");
-    res.json({hi : "Hello World @@"});
+// Middleware
+//CLIENT -> MIDDLEWARE -> SERVER -> CLIENT
+app.use(express.json());
+app.use(authRouter);
+
+//Connections
+mongoose.connect(DB)
+.then(() => {
+    console.log("Connection Sccessfull");
+}).catch((e) => {
+    console.log(e);
 });
-
-app.get('/',(req,res) => {
-    res.json({name: "PeaceCool"});
-});
-
-//GET,PUT,POST,DELETE,UPDATE -> CRUD (Create,read,update,delete)
-
 
 
 app.listen(PORT,"0.0.0.0",() => {
